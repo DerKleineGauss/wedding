@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rugenhof Gästeplan</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* Layout: one calm column. Hero line, own stay form, a night-by-night strip of who is on the farm, the houses, and a couple-only control block. */
+:root {
+  /* Palette: chalk (Kreide), Bodden ink, one loud accent (Sanddorn) for the wedding nights, hues per Haus */
+  color-scheme: light;
+  --bg: #F1F5F4;
+  --surface: #FFFFFF;
+  --surface-2: #E7EEED;
+  --ink: #12303A;
+  --muted: #546E77;
+  --line: #D2DDDC;
+  --we: #EDF2F1;
+  --btn: #12303A;
+  --btn-ink: #F1F5F4;
+  --wed: #D9730D;
+  --wed-tint: #FBEBD6;
+  --ok: #25704A;
+  --ok-tint: #DDF1E5;
+  --warn: #8A5A00;
+  --warn-tint: #FFF0CC;
+  --bad: #B3261E;
+  --bad-tint: #FCE2DF;
+  --c0: #5A7079;
+  --c1: #2B7C86;
+  --c2: #5B5BA6;
+  --c3: #8A6A12;
+  --c4: #A8475A;
+  --c5: #3E7D43;
+  --c6: #8A3E8E;
+  /* Type: Bricolage Grotesque for headings, Figtree for reading and numbers */
+  --font-display: 'Bricolage Grotesque', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Figtree', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --cw: 36px;
+  --namew: 188px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0E1A1F; --surface: #15262D; --surface-2: #1C323A; --ink: #E4EEEC; --muted: #93AAB2; --line: #2A424B; --we: #182B32;
+    --btn: #E4EEEC; --btn-ink: #0E1A1F;
+    --wed: #F0A03A; --wed-tint: #3A2A14;
+    --ok: #7AD3A0; --ok-tint: #173A28; --warn: #E8BC52; --warn-tint: #3A2F10; --bad: #FF9B92; --bad-tint: #43201D;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 15px/1.5 var(--font-body);
+}
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-block: 28px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { font-family: var(--font-display); margin: 0; line-height: 1.15; text-wrap: balance; }
+h1 { font-size: clamp(30px, 6vw, 44px); font-weight: 700; letter-spacing: -0.015em; }
+h2 { font-size: 23px; font-weight: 700; letter-spacing: -0.005em; }
+h3 { font-size: 17px; font-weight: 600; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+.eyebrow { font-size: 12px; letter-spacing: 0.09em; text-transform: uppercase; font-weight: 600; color: var(--muted); }
+
+.top { display: flex; flex-wrap: wrap; gap: 18px 28px; align-items: flex-end; justify-content: space-between; }
+.top .intro { max-width: 60ch; margin-top: 12px; font-size: 16px; }
+.shore { display: block; width: 100%; height: 12px; margin-top: 22px; color: var(--line); }
+
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 999px; font-size: 13px; font-weight: 600; background: var(--surface-2); color: var(--ink); white-space: nowrap; }
+.chip.ok { background: var(--ok-tint); color: var(--ok); }
+.chip.warn { background: var(--warn-tint); color: var(--warn); }
+.chip.bad { background: var(--bad-tint); color: var(--bad); }
+.chip i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; display: inline-block; }
+
+section { margin-top: 40px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; margin-bottom: 14px; }
+.sec-head p { max-width: 62ch; }
+
+.banner { margin-top: 20px; padding: 12px 16px; border-radius: 10px; background: var(--warn-tint); color: var(--warn); font-weight: 500; }
+.mine-unit { margin-top: 20px; padding: 14px 18px; border-radius: 10px; background: var(--ok-tint); color: var(--ok); font-weight: 500; font-size: 16px; }
+.mine-unit b { font-weight: 700; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field.wide { grid-column: 1 / -1; }
+label { font-size: 13px; font-weight: 600; }
+input, select, textarea {
+  font: inherit; font-size: 16px; color: var(--ink); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; min-height: 42px; width: 100%; min-width: 0;
+}
+input:disabled, select:disabled { opacity: 0.55; }
+:focus-visible { outline: 2px solid var(--wed); outline-offset: 2px; }
+.hint { font-size: 13px; color: var(--muted); }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; align-items: center; }
+.btn { font: inherit; font-weight: 600; font-size: 15px; min-height: 42px; padding: 0 18px; border-radius: 8px; border: 1px solid var(--btn); background: var(--btn); color: var(--btn-ink); cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn.small { min-height: 34px; padding: 0 12px; font-size: 13px; }
+.btn.armed { background: var(--bad); border-color: var(--bad); color: #fff; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.msg { min-height: 22px; margin-top: 10px; font-size: 14px; color: var(--muted); }
+.msg.err { color: var(--bad); font-weight: 500; }
+.pill { font: inherit; font-size: 13px; font-weight: 600; min-height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.pill[aria-pressed="true"] { background: var(--btn); color: var(--btn-ink); border-color: var(--btn); }
+.mine-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; align-items: center; }
+.editlink { margin-top: 14px; padding: 12px 14px; border-radius: 10px; background: var(--surface-2); font-size: 14px; display: flex; flex-direction: column; gap: 8px; }
+.cp { display: flex; gap: 8px; flex-wrap: wrap; }
+.cp input { flex: 1 1 220px; font-size: 13px; min-height: 38px; }
+
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.tl { width: max-content; min-width: 100%; --n: 7; }
+.row { display: grid; grid-template-columns: var(--namew) repeat(var(--n), var(--cw)); align-items: stretch; border-bottom: 1px solid var(--line); }
+.row:last-child { border-bottom: 0; }
+.row > * { grid-row: 1; }
+.cell { min-width: 0; }
+.cell.name { grid-column: 1; position: sticky; left: 0; z-index: 3; background: var(--surface); padding: 8px 12px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--line); }
+.cell.name .nm { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cell.name .sub { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cell.d { border-left: 1px solid var(--line); }
+.cell.d.we { background: var(--we); }
+.cell.d.wed { background: var(--wed-tint); }
+.head .cell.d { display: flex; flex-direction: column; align-items: center; padding: 6px 0; font-size: 12px; line-height: 1.25; color: var(--muted); }
+.head .cell.d b { font-size: 15px; color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.head .cell.d .mo { height: 14px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+.head .cell.d.wed { box-shadow: inset 0 3px 0 var(--wed); }
+.head .cell.d.wed b { color: var(--wed); }
+.count .cell.d { display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; font-variant-numeric: tabular-nums; }
+.count .cell.d.warn { background: var(--warn-tint); color: var(--warn); }
+.count .cell.d.bad { background: var(--bad-tint); color: var(--bad); }
+.count .cell.name { background: var(--surface-2); }
+.count { background: var(--surface-2); }
+.bar { align-self: center; z-index: 1; margin: 7px 3px; min-height: 28px; border-radius: 7px; color: #fff; font-size: 12px; font-weight: 600; padding: 0 8px; display: flex; align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; background: var(--c0); }
+.bar.c1 { background: var(--c1); } .bar.c2 { background: var(--c2); } .bar.c3 { background: var(--c3); } .bar.c4 { background: var(--c4); } .bar.c5 { background: var(--c5); } .bar.c6 { background: var(--c6); }
+.row.me .cell.name .nm { color: var(--wed); }
+.empty { padding: 28px 20px; text-align: center; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 12px; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 12px; height: 12px; border-radius: 4px; display: inline-block; background: var(--c0); }
+.sw.c1 { background: var(--c1); } .sw.c2 { background: var(--c2); } .sw.c3 { background: var(--c3); } .sw.c4 { background: var(--c4); } .sw.c5 { background: var(--c5); } .sw.c6 { background: var(--c6); }
+.sw.wed { background: var(--wed); }
+
+.units { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.unit { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.unit .u-title { display: flex; align-items: center; gap: 10px; }
+.unit .u-meta { font-size: 14px; color: var(--muted); }
+.unit ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.unit li { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; border-top: 1px solid var(--line); padding-top: 6px; }
+.unit li span:last-child { color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+.admin { border-top: 1px solid var(--line); padding-top: 8px; }
+.admin-block { margin-top: 24px; }
+.admin-block > h3 { margin-bottom: 10px; }
+.tbl { width: 100%; border-collapse: collapse; min-width: 560px; }
+.tbl th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.tbl td { padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; font-variant-numeric: tabular-nums; }
+.tbl tr:last-child td { border-bottom: 0; }
+.tbl select { min-height: 38px; padding: 6px 10px; }
+.tbl .acts { display: flex; gap: 8px; justify-content: flex-end; }
+.ue { display: grid; grid-template-columns: minmax(140px, 2fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(140px, 2fr) auto; gap: 10px; align-items: end; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.ue:last-of-type { border-bottom: 0; }
+
+.foot { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; font-size: 13px; color: var(--muted); }
+.linkbtn { font: inherit; background: none; border: 0; padding: 0; color: var(--ink); text-decoration: underline; cursor: pointer; }
+.login { margin-top: 16px; max-width: 460px; }
+
+.status { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); background: var(--btn); color: var(--btn-ink); padding: 10px 18px; border-radius: 999px; font-weight: 500; z-index: 20; max-width: calc(100% - 32px); }
+.status.err { background: var(--bad); color: #fff; }
+@media (max-width: 640px) {
+  :root { --namew: 132px; --cw: 34px; }
+  .ue { grid-template-columns: 1fr 1fr; }
+  .ue .field:first-child, .ue .field:nth-child(4) { grid-column: 1 / -1; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="top">
+      <div>
+        <p class="eyebrow">Ferienanlage Rugenhof · Dreschvitz, Rügen</p>
+        <h1>Rugenhof Gästeplan</h1>
+        <p class="intro">Trag ein, von wann bis wann du auf dem Rugenhof bist. Die Zuteilung zu den Häusern machen wir als Brautpaar. Sobald alle Zeiten da sind, schalten wir sie hier frei.</p>
+      </div>
+      <span id="releaseChip" class="chip"><i></i><span>Zuteilung noch nicht freigegeben</span></span>
+    </div>
+    <svg class="shore" viewBox="0 0 600 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6 Q25 0 50 6 T100 6 T150 6 T200 6 T250 6 T300 6 T350 6 T400 6 T450 6 T500 6 T550 6 T600 6" fill="none" stroke="currentColor" stroke-width="1.5" vector-effect="non-scaling-stroke"/></svg>
+    <div id="banner" class="banner" hidden></div>
+    <div id="mineUnit" class="mine-unit" hidden></div>
+  </header>
+
+  <section id="mine" aria-labelledby="mine-h">
+    <div class="sec-head">
+      <h2 id="mine-h">Dein Aufenthalt</h2>
+      <p class="muted" id="mine-sub">Du kannst deine Angaben jederzeit ändern.</p>
+    </div>
+    <form id="stayForm" class="card" novalidate>
+      <div class="fields">
+        <div class="field"><label for="f-name">Name</label><input id="f-name" type="text" maxlength="60" autocomplete="name" placeholder="Vor- und Nachname"></div>
+        <div class="field"><label for="f-persons">Personen (inkl. dir)</label><input id="f-persons" type="number" min="1" max="40" step="1" value="1" inputmode="numeric"></div>
+        <div class="field"><label for="f-from">Anreise</label><input id="f-from" type="date"></div>
+        <div class="field"><label for="f-to">Abreise</label><input id="f-to" type="date"></div>
+        <div class="field wide"><label for="f-note">Hinweis (optional)</label><input id="f-note" type="text" maxlength="140" placeholder="z. B. mit Hund, Kinderbett nötig, später Anreise"></div>
+      </div>
+      <p class="hint" style="margin-top:12px">Abreise ist der Tag, an dem du den Rugenhof verlässt. Gezählt werden die Nächte dazwischen.</p>
+      <div class="actions">
+        <button class="btn" type="submit" id="saveBtn">Eintrag speichern</button>
+        <button class="btn ghost" type="button" id="deleteBtn" hidden>Eintrag löschen</button>
+        <button class="btn ghost" type="button" id="backBtn" hidden>Zurück</button>
+      </div>
+      <p id="formMsg" class="msg" role="status"></p>
+      <div id="mineList" class="mine-list" hidden></div>
+      <div id="editLink" class="editlink" hidden></div>
+    </form>
+  </section>
+
+  <section aria-labelledby="tl-h">
+    <div class="sec-head">
+      <h2 id="tl-h">Wer ist wann da</h2>
+      <p class="muted">Eine Spalte entspricht einer Nacht. Die Zahl oben zeigt, wie viele Personen in dieser Nacht auf dem Hof sind.</p>
+    </div>
+    <div class="scroll"><div id="timeline"></div></div>
+    <div id="legend" class="legend"></div>
+  </section>
+
+  <section aria-labelledby="un-h">
+    <div class="sec-head">
+      <h2 id="un-h">Die Häuser</h2>
+      <p class="muted" id="unitsNote"></p>
+    </div>
+    <div id="units" class="units"></div>
+  </section>
+
+  <section id="admin" class="admin" hidden aria-labelledby="ad-h">
+    <div class="sec-head">
+      <h2 id="ad-h">Zuteilung</h2>
+      <span class="chip">Nur für euch sichtbar</span>
+    </div>
+    <div id="adminBody"></div>
+  </section>
+
+  <div id="loginBox" class="card login" hidden>
+    <form id="loginForm">
+      <h3>Anmeldung für das Brautpaar</h3>
+      <div class="fields" style="margin-top:12px">
+        <div class="field wide"><label for="l-email">E-Mail</label><input id="l-email" type="email" autocomplete="username"></div>
+        <div class="field wide"><label for="l-pw">Passwort</label><input id="l-pw" type="password" autocomplete="current-password"></div>
+      </div>
+      <p id="loginHint" class="hint" style="margin-top:10px"></p>
+      <div class="actions"><button class="btn" type="submit">Anmelden</button><button class="btn ghost" type="button" id="loginCancel">Abbrechen</button></div>
+    </form>
+  </div>
+
+  <footer class="foot"><span>Ferienanlage Rugenhof · Dreschvitz auf Rügen</span><span id="footAuth"></span></footer>
+</div>
+<div id="status" class="status" role="status" aria-live="polite" hidden></div>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+(function () {
+  "use strict";
+  var CFG = window.RUGENHOF_CONFIG || {};
+  var DAY = 86400000, LS_KEY = "rugenhof.entries.v1";
+  var state = {
+    api: null, demo: false, isAdmin: false,
+    units: [], stays: [], config: {}, release: { released: false, map: {} }, plan: { map: {} },
+    loaded: false, formReady: false, failed: "",
+    mine: [], currentId: null, adminEditId: null, dirty: false, pendingAdmin: false
+  };
+
+  /* ---------- small helpers ---------- */
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  function add(el, kid) {
+    if (kid == null || kid === false) return;
+    if (Array.isArray(kid)) { kid.forEach(function (k) { add(el, k); }); return; }
+    el.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
+  }
+  function h(tag, props) {
+    var el = document.createElement(tag);
+    if (props) Object.keys(props).forEach(function (k) {
+      var v = props[k];
+      if (v == null || v === false) return;
+      if (k === "class") el.className = v;
+      else if (k.slice(0, 2) === "on") el.addEventListener(k.slice(2), v);
+      else if (k === "value") el.value = v;
+      else el.setAttribute(k, v === true ? "" : String(v));
+    });
+    for (var i = 2; i < arguments.length; i++) add(el, arguments[i]);
+    return el;
+  }
+  var pd = function (s) { var p = s.split("-").map(Number); return Date.UTC(p[0], p[1] - 1, p[2]); };
+  var fd = function (t) { return new Date(t).toISOString().slice(0, 10); };
+  var fmtWd = new Intl.DateTimeFormat("de-DE", { weekday: "short", timeZone: "UTC" });
+  var fmtMo = new Intl.DateTimeFormat("de-DE", { month: "short", timeZone: "UTC" });
+  var dm = function (t) { var d = new Date(t); return d.getUTCDate() + "." + (d.getUTCMonth() + 1) + "."; };
+  var okDate = function (s) { return typeof s === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s) && !isNaN(pd(s)); };
+  var plural = function (n) { return n + (n === 1 ? " Person" : " Personen"); };
+  function uuid() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    var b = new Uint8Array(16); crypto.getRandomValues(b); b[6] = (b[6] & 15) | 64; b[8] = (b[8] & 63) | 128;
+    var x = Array.prototype.map.call(b, function (n) { return ("0" + n.toString(16)).slice(-2); }).join("");
+    return x.slice(0, 8) + "-" + x.slice(8, 12) + "-" + x.slice(12, 16) + "-" + x.slice(16, 20) + "-" + x.slice(20);
+  }
+  function newSecret() {
+    var b = new Uint8Array(18); crypto.getRandomValues(b);
+    return Array.prototype.map.call(b, function (n) { return ("0" + n.toString(16)).slice(-2); }).join("");
+  }
+
+  var statusTimer = null;
+  function say(msg, isErr) {
+    var el = $("#status");
+    el.textContent = msg; el.hidden = false; el.className = "status" + (isErr ? " err" : "");
+    clearTimeout(statusTimer);
+    statusTimer = setTimeout(function () { el.hidden = true; }, isErr ? 7000 : 3000);
+  }
+  function errText(e) {
+    var m = String((e && e.message) || e || "");
+    if (/forbidden/i.test(m)) return "Dieser Eintrag gehört zu einem anderen Gerät. Öffne dafür deinen persönlichen Bearbeitungslink.";
+    if (/limit/i.test(m)) return "Es sind schon sehr viele Einträge vorhanden. Bitte melde dich beim Brautpaar.";
+    if (/row-level security|permission|jwt|401|403/i.test(m)) return "Dafür fehlt die Berechtigung. Bitte melde dich als Brautpaar an.";
+    return "Das Speichern hat nicht geklappt. Prüfe deine Verbindung und versuch es noch einmal.";
+  }
+  var writeQ = Promise.resolve();
+  function write(fn, okMsg) {
+    writeQ = writeQ.then(function () {
+      return Promise.resolve().then(fn).then(function () { if (okMsg) say(okMsg); return true; }, function (e) { say(errText(e), true); return false; });
+    });
+    return writeQ;
+  }
+  function arm(btn, label, armedLabel, action) {
+    var t = null;
+    btn.addEventListener("click", function () {
+      if (btn.classList.contains("armed")) { clearTimeout(t); btn.classList.remove("armed"); btn.textContent = label; action(); return; }
+      btn.classList.add("armed"); btn.textContent = armedLabel;
+      t = setTimeout(function () { btn.classList.remove("armed"); btn.textContent = label; }, 4000);
+    });
+  }
+
+  /* ---------- this device's own entries ---------- */
+  function loadMine() {
+    try { var v = JSON.parse(localStorage.getItem(LS_KEY) || "[]"); return Array.isArray(v) ? v.filter(function (e) { return e && e.id && e.secret; }) : []; }
+    catch (e) { return []; }
+  }
+  function saveMine() { try { localStorage.setItem(LS_KEY, JSON.stringify(state.mine)); } catch (e) {} }
+  function mineEntry(id) { for (var i = 0; i < state.mine.length; i++) if (state.mine[i].id === id) return state.mine[i]; return null; }
+  function isMine(id) { return !!mineEntry(id); }
+  function consumeHash() {
+    var m = /^#edit=([0-9a-f-]{36})\.([0-9a-f]{16,64})$/i.exec(location.hash || "");
+    if (!m) return;
+    if (!mineEntry(m[1])) { state.mine.push({ id: m[1].toLowerCase(), secret: m[2] }); saveMine(); }
+    try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+  }
+
+  /* ---------- data backends ---------- */
+  function mapStay(r) { return { id: r.id, name: r.name, persons: r.persons, from: r.from_date, to: r.to_date, note: r.note || "", manual: !!r.manual }; }
+  function mapUnit(r) { return { id: r.id, name: r.name, group: r.grp || "", beds: r.beds, max: r.max_beds, note: r.note || "", order: r.ord, blocked: r.blocked || [], asOf: r.as_of || "" }; }
+  function unitRow(u) { return { id: u.id, name: u.name, grp: u.group || "", beds: u.beds, max_beds: u.max, note: u.note || "", ord: u.order == null ? 0 : u.order, blocked: u.blocked || [], as_of: u.asOf || "" }; }
+
+  function makeSupabaseApi(url, key) {
+    var sb = window.supabase.createClient(url, key, { auth: { persistSession: true, autoRefreshToken: true } });
+    function chk(r) { if (r.error) throw r.error; return r.data; }
+    return {
+      session: function () { return sb.auth.getSession().then(function (r) { return r.data && r.data.session; }); },
+      isAdmin: function () { return sb.rpc("is_admin").then(function (r) { return r.error ? false : !!r.data; }); },
+      signIn: function (email, pw) { return sb.auth.signInWithPassword({ email: email, password: pw }).then(chk); },
+      signOut: function () { return sb.auth.signOut(); },
+      loadPublic: function () {
+        return Promise.all([
+          sb.from("units").select("*").order("ord"),
+          sb.from("stays_public").select("*"),
+          sb.from("config").select("*").eq("id", 1).maybeSingle(),
+          sb.from("release").select("*").eq("id", 1).maybeSingle()
+        ]).then(function (r) {
+          var cfg = chk(r[2]) || {}, rel = chk(r[3]) || {};
+          return {
+            units: chk(r[0]).map(mapUnit), stays: chk(r[1]).map(mapStay),
+            config: { weddingFrom: cfg.wedding_from || "", weddingTo: cfg.wedding_to || "" },
+            release: { released: !!rel.released, map: rel.map || {} }
+          };
+        });
+      },
+      loadPlan: function () {
+        return sb.from("assignments").select("*").then(chk).then(function (rows) { var m = {}; rows.forEach(function (x) { m[x.stay_id] = x.unit_id; }); return m; });
+      },
+      saveStay: function (e) { return sb.rpc("save_stay", { p_id: e.id, p_secret: e.secret, p_name: e.name, p_persons: e.persons, p_from: e.from, p_to: e.to, p_note: e.note }).then(chk); },
+      deleteStay: function (id, secret) { return sb.rpc("delete_stay", { p_id: id, p_secret: secret }).then(chk); },
+      adminSaveStay: function (e) { return sb.from("stays").upsert({ id: e.id, name: e.name, persons: e.persons, from_date: e.from, to_date: e.to, note: e.note, manual: !!e.manual, updated_at: new Date().toISOString() }).then(chk); },
+      adminDeleteStay: function (id) { return sb.from("stays").delete().eq("id", id).then(chk); },
+      setAssignment: function (stayId, unitId) {
+        return unitId ? sb.from("assignments").upsert({ stay_id: stayId, unit_id: unitId }).then(chk) : sb.from("assignments").delete().eq("stay_id", stayId).then(chk);
+      },
+      setRelease: function (released, map) { return sb.from("release").upsert({ id: 1, released: released, map: map, at: new Date().toISOString() }).then(chk); },
+      saveConfig: function (from, to) { return sb.from("config").upsert({ id: 1, wedding_from: from || null, wedding_to: to || null }).then(chk); },
+      saveUnit: function (u) { return sb.from("units").upsert(unitRow(u)).then(chk); },
+      deleteUnit: function (id) { return sb.from("units").delete().eq("id", id).then(chk); }
+    };
+  }
+
+  function makeDemoApi() {
+    var KEY = "rugenhof.demo.v1", db;
+    function U(id, name, group, beds, max, ord, blocked) { return { id: id, name: name, group: group, beds: beds, max: max, note: "", order: ord, blocked: blocked, asOf: "11.11.2026" }; }
+    function S(name, persons, from, to, note) { return { id: uuid(), secret: newSecret(), name: name, persons: persons, from: from, to: to, note: note || "", manual: true }; }
+    function seed() {
+      var hecht = ["2027-07-29/2027-08-01", "2027-08-02/2027-08-06", "2027-08-20/2027-08-26"], barsch = ["2027-07-29/2027-08-07", "2027-08-26/2027-08-29"];
+      return {
+        units: [U("lutt-hecht", "Lütt Hecht", "Haus Hecht", 3, 5, 0, hecht), U("groot-hecht", "Groot Hecht", "Haus Hecht", 10, 14, 1, hecht),
+          U("flussbarsch", "Flussbarsch", "Haus Barsch", 6, 8, 2, barsch), U("boddenbarsch", "Boddenbarsch", "Haus Barsch", 7, 9, 3, barsch),
+          U("ploetz", "Haus Plötz", "Ganzes Haus", 10, 16, 4, ["2027-07-29/2027-08-07", "2027-08-19/2027-08-22", "2027-08-27/2027-08-29"]),
+          U("boddenkieker", "FeWo Boddenkieker", "Ferienwohnung", 4, 6, 5, ["2027-07-29/2027-08-07"])],
+        stays: [S("Beispiel: Familie Weber", 4, "2027-08-14", "2027-08-19", "Beispieleintrag"), S("Beispiel: Anna und Tom", 2, "2027-08-15", "2027-08-18"),
+          S("Beispiel: Freundesgruppe", 6, "2027-08-16", "2027-08-18"), S("Beispiel: Oma Inge", 1, "2027-08-12", "2027-08-20", "Beispieleintrag")],
+        plan: {}, config: { weddingFrom: "2027-08-16", weddingTo: "2027-08-18" }, release: { released: false, map: {} }
+      };
+    }
+    try { db = JSON.parse(localStorage.getItem(KEY)); } catch (e) { db = null; }
+    if (!db || !db.units) db = seed();
+    function persist() { try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) {} }
+    function clone(x) { return JSON.parse(JSON.stringify(x)); }
+    function ok(v) { persist(); return Promise.resolve(v); }
+    function findStay(id) { for (var i = 0; i < db.stays.length; i++) if (db.stays[i].id === id) return db.stays[i]; return null; }
+    return {
+      session: function () { return Promise.resolve(null); },
+      isAdmin: function () { return Promise.resolve(false); },
+      signIn: function () { return Promise.resolve(true); },
+      signOut: function () { return Promise.resolve(); },
+      loadPublic: function () {
+        return Promise.resolve(clone({ units: db.units, stays: db.stays.map(function (s) { return { id: s.id, name: s.name, persons: s.persons, from: s.from, to: s.to, note: s.note, manual: s.manual }; }), config: db.config, release: db.release }));
+      },
+      loadPlan: function () { return Promise.resolve(clone(db.plan)); },
+      saveStay: function (e) {
+        var ex = findStay(e.id);
+        if (ex) { if (ex.secret !== e.secret) return Promise.reject(new Error("forbidden")); ex.name = e.name; ex.persons = e.persons; ex.from = e.from; ex.to = e.to; ex.note = e.note; }
+        else db.stays.push({ id: e.id, secret: e.secret, name: e.name, persons: e.persons, from: e.from, to: e.to, note: e.note, manual: false });
+        return ok();
+      },
+      deleteStay: function (id, secret) {
+        var ex = findStay(id); if (!ex || ex.secret !== secret) return Promise.reject(new Error("forbidden"));
+        db.stays = db.stays.filter(function (s) { return s.id !== id; }); delete db.plan[id]; return ok();
+      },
+      adminSaveStay: function (e) {
+        var ex = findStay(e.id);
+        if (ex) { ex.name = e.name; ex.persons = e.persons; ex.from = e.from; ex.to = e.to; ex.note = e.note; }
+        else db.stays.push({ id: e.id, secret: newSecret(), name: e.name, persons: e.persons, from: e.from, to: e.to, note: e.note, manual: true });
+        return ok();
+      },
+      adminDeleteStay: function (id) { db.stays = db.stays.filter(function (s) { return s.id !== id; }); delete db.plan[id]; return ok(); },
+      setAssignment: function (stayId, unitId) { if (unitId) db.plan[stayId] = unitId; else delete db.plan[stayId]; return ok(); },
+      setRelease: function (released, map) { db.release = { released: released, map: clone(map) }; return ok(); },
+      saveConfig: function (from, to) { db.config = { weddingFrom: from || "", weddingTo: to || "" }; return ok(); },
+      saveUnit: function (u) {
+        var i = db.units.map(function (x) { return x.id; }).indexOf(u.id);
+        if (i >= 0) db.units[i] = clone(u); else db.units.push(clone(u));
+        db.units.sort(function (a, b) { return a.order - b.order; }); return ok();
+      },
+      deleteUnit: function (id) {
+        db.units = db.units.filter(function (u) { return u.id !== id; });
+        Object.keys(db.plan).forEach(function (k) { if (db.plan[k] === id) delete db.plan[k]; }); return ok();
+      }
+    };
+  }
+
+  /* ---------- derived data ---------- */
+  function stays() {
+    return state.stays.map(function (s) {
+      return { id: s.id, name: String(s.name || "Gast"), persons: Math.max(1, Math.round(+s.persons || 1)), from: s.from, to: s.to, note: String(s.note || "") };
+    }).filter(function (s) { return okDate(s.from) && okDate(s.to) && pd(s.to) > pd(s.from); })
+      .sort(function (a, b) { return a.from.localeCompare(b.from) || a.to.localeCompare(b.to) || a.name.localeCompare(b.name, "de"); });
+  }
+  function rawStay(id) { for (var i = 0; i < state.stays.length; i++) if (state.stays[i].id === id) return state.stays[i]; return null; }
+  function unitIndex(id) { for (var i = 0; i < state.units.length; i++) if (state.units[i].id === id) return i; return -1; }
+  function colorOf(unitId) { var i = unitIndex(unitId); return i < 0 ? 0 : (i % 6) + 1; }
+  function visibleMap() { return state.isAdmin ? state.plan.map : (state.release.released ? state.release.map : {}); }
+  function unitFor(stayId, map) { var i = unitIndex(map[stayId]); return i < 0 ? null : state.units[i]; }
+  function weddingRange() {
+    var c = state.config, f = okDate(c.weddingFrom) ? c.weddingFrom : null;
+    if (!f) return null;
+    var t = okDate(c.weddingTo) && pd(c.weddingTo) >= pd(f) ? c.weddingTo : f;
+    return { from: pd(f), to: pd(t) };
+  }
+  function blockedFor(u, s) {
+    var out = [];
+    (u.blocked || []).forEach(function (r) {
+      var p = String(r).split("/");
+      if (p.length === 2 && okDate(p[0]) && okDate(p[1]) && pd(s.from) < pd(p[1]) && pd(p[0]) < pd(s.to)) out.push(p);
+    });
+    return out;
+  }
+  function fmtRange(p) { return dm(pd(p[0])) + "–" + dm(pd(p[1])); }
+  function bedTotals() {
+    var b = 0, m = 0;
+    state.units.forEach(function (u) { b += +u.beds || 0; m += Math.max(+u.max || 0, +u.beds || 0); });
+    return { beds: b, max: m };
+  }
+  function range(list) {
+    var min = Infinity, max = -Infinity;
+    list.forEach(function (s) { min = Math.min(min, pd(s.from)); max = Math.max(max, pd(s.to) - DAY); });
+    var W = weddingRange();
+    if (W && isFinite(min)) { min = Math.min(min, W.from); max = Math.max(max, W.to); }
+    if (!isFinite(min)) return null;
+    while ((max - min) / DAY < 6) max += DAY;
+    return { min: min, max: max, n: (max - min) / DAY + 1 };
+  }
+  function peakFor(unitId, map, list) {
+    var rel = list.filter(function (s) { return map[s.id] === unitId; });
+    if (!rel.length) return 0;
+    var mn = Math.min.apply(null, rel.map(function (s) { return pd(s.from); }));
+    var mx = Math.max.apply(null, rel.map(function (s) { return pd(s.to); }));
+    var peak = 0;
+    for (var t = mn; t < mx; t += DAY) {
+      var sum = 0;
+      rel.forEach(function (s) { if (pd(s.from) <= t && t < pd(s.to)) sum += s.persons; });
+      peak = Math.max(peak, sum);
+    }
+    return peak;
+  }
+  function sameMap(a, b) {
+    var ka = Object.keys(a), kb = Object.keys(b);
+    if (ka.length !== kb.length) return false;
+    return ka.every(function (k) { return a[k] === b[k]; });
+  }
+  function cleanPlan() {
+    var ids = {}; state.stays.forEach(function (s) { ids[s.id] = 1; });
+    var out = {};
+    Object.keys(state.plan.map).forEach(function (k) { if (ids[k] && unitIndex(state.plan.map[k]) >= 0) out[k] = state.plan.map[k]; });
+    return out;
+  }
+
+  /* ---------- rendering ---------- */
+  var raf = 0;
+  function queue() { if (raf) return; raf = requestAnimationFrame(function () { raf = 0; renderAll(); }); }
+  function renderAll() { renderHeader(); renderMine(); renderTimeline(); renderUnits(); renderAdmin(); renderFoot(); }
+
+  function renderHeader() {
+    var chip = $("#releaseChip"), rel = state.release.released;
+    chip.className = "chip" + (rel ? " ok" : "");
+    chip.lastChild.textContent = rel ? "Zuteilung freigegeben" : "Zuteilung noch nicht freigegeben";
+
+    var banner = $("#banner"), msg = state.failed || (state.demo ? "Vorschau-Modus: Eingaben bleiben nur in diesem Browser gespeichert. Für den echten Betrieb trägst du die Supabase-Daten in config.js ein." : "");
+    banner.textContent = msg; banner.hidden = !msg;
+
+    var box = $("#mineUnit"), u = null, mine = null;
+    if (rel) stays().forEach(function (s) { if (!u && isMine(s.id)) { var x = unitFor(s.id, state.release.map); if (x) { u = x; mine = s; } } });
+    if (u) {
+      box.replaceChildren("Du wohnst im ", h("b", null, u.name), " · " + dm(pd(mine.from)) + " bis " + dm(pd(mine.to)));
+      box.hidden = false;
+    } else box.hidden = true;
+  }
+
+  function copyText(input, text) {
+    var done = function () { say("Link kopiert."); };
+    var fallback = function () { input.focus(); input.select(); say("Link markiert. Bitte mit Strg+C oder Teilen kopieren."); };
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  }
+  function renderMine() {
+    var box = $("#mineList"), link = $("#editLink");
+    box.replaceChildren(); link.replaceChildren(); link.hidden = true; box.hidden = true;
+    if (state.adminEditId) return;
+    var mineStays = state.mine.map(function (m) { return rawStay(m.id); }).filter(Boolean);
+    if (mineStays.length) {
+      box.hidden = false;
+      box.append(h("span", { class: "hint" }, "Deine Einträge:"));
+      mineStays.forEach(function (s) {
+        box.append(h("button", { type: "button", class: "pill", "aria-pressed": state.currentId === s.id ? "true" : "false", onclick: function () { switchTo(s.id); } }, s.name));
+      });
+      box.append(h("button", { type: "button", class: "pill", "aria-pressed": state.currentId === null ? "true" : "false", onclick: function () { switchTo(null); } }, "+ Weiterer Eintrag"));
+    }
+    var m = state.currentId ? mineEntry(state.currentId) : null;
+    if (m && rawStay(m.id)) {
+      var url = location.href.split("#")[0] + "#edit=" + m.id + "." + m.secret;
+      var inp = h("input", { type: "text", readonly: true, value: url, "aria-label": "Persönlicher Bearbeitungslink" });
+      link.hidden = false;
+      link.append(h("strong", null, "Dein persönlicher Bearbeitungslink"),
+        h("span", { class: "hint" }, "Mit diesem Link kannst du deinen Eintrag auch auf einem anderen Gerät ändern. Gib ihn nicht weiter."),
+        h("div", { class: "cp" }, inp, h("button", { class: "btn ghost small", type: "button", onclick: function () { copyText(inp, url); } }, "Kopieren")));
+    }
+  }
+
+  function renderTimeline() {
+    var box = $("#timeline"), legend = $("#legend");
+    box.replaceChildren(); legend.replaceChildren();
+    var list = stays();
+    if (!list.length) {
+      box.append(h("div", { class: "empty" }, !state.loaded ? "Einträge werden geladen …" : "Noch keine Einträge. Trag oben deine Anreise und Abreise ein, dann erscheint sie hier."));
+      return;
+    }
+    var R = range(list), n = R.n, wed = weddingRange(), map = visibleMap(), tot = bedTotals();
+    var inWed = function (t) { return !!wed && t >= wed.from && t <= wed.to; };
+    var days = []; for (var i = 0; i < n; i++) days.push(R.min + i * DAY);
+    var grid = h("div", { class: "tl", style: "--n:" + n });
+
+    var head = h("div", { class: "row head" }, h("div", { class: "cell name" }, h("span", { class: "nm" }, "Gast"), h("span", { class: "sub" }, "Nächte")));
+    days.forEach(function (t, i) {
+      var d = new Date(t), showMo = i === 0 || d.getUTCDate() === 1, isWed = inWed(t);
+      head.append(h("div", { class: "cell d" + (isWed ? " wed" : ""), style: "grid-column:" + (i + 2), title: isWed ? "Hochzeit" : null },
+        h("span", { class: "mo" }, showMo ? fmtMo.format(t) : ""), h("span", null, fmtWd.format(t)), h("b", null, d.getUTCDate())));
+    });
+    grid.append(head);
+
+    var count = h("div", { class: "row count" }, h("div", { class: "cell name" }, h("span", { class: "nm" }, "Personen"), h("span", { class: "sub" }, tot.beds ? "Betten: " + tot.beds + " (bis " + tot.max + ")" : "pro Nacht")));
+    days.forEach(function (t, i) {
+      var sum = 0; list.forEach(function (s) { if (pd(s.from) <= t && t < pd(s.to)) sum += s.persons; });
+      var cls = "cell d" + (inWed(t) ? " wed" : "");
+      if (tot.beds && sum > tot.max) cls += " bad"; else if (tot.beds && sum > tot.beds) cls += " warn";
+      count.append(h("div", { class: cls, style: "grid-column:" + (i + 2), title: sum + " Personen in dieser Nacht" }, sum || "–"));
+    });
+    grid.append(count);
+
+    var used = {};
+    list.forEach(function (s) {
+      var u = unitFor(s.id, map), c = u ? colorOf(u.id) : 0, mine = isMine(s.id);
+      if (u) used[u.id] = 1;
+      var row = h("div", { class: "row" + (mine ? " me" : "") },
+        h("div", { class: "cell name", title: s.name + (s.note ? " – " + s.note : "") },
+          h("span", { class: "nm" }, s.name + (mine ? " (du)" : "")),
+          h("span", { class: "sub" }, plural(s.persons) + (u ? " · " + u.name : ""))));
+      days.forEach(function (t, i) {
+        var d = new Date(t).getUTCDay();
+        row.append(h("div", { class: "cell d" + (inWed(t) ? " wed" : (d === 0 || d === 6 ? " we" : "")), style: "grid-column:" + (i + 2) }));
+      });
+      var start = (pd(s.from) - R.min) / DAY, len = (pd(s.to) - pd(s.from)) / DAY;
+      row.append(h("div", { class: "bar c" + c, style: "grid-column:" + (start + 2) + "/span " + len, title: s.name + ": " + s.from + " bis " + s.to + (s.note ? " – " + s.note : "") }, dm(pd(s.from)) + " – " + dm(pd(s.to))));
+      grid.append(row);
+    });
+    box.append(grid);
+
+    legend.append(h("span", null, h("i", { class: "sw wed" }), wed ? "Hochzeit " + dm(wed.from) + "–" + dm(wed.to) : "Hochzeit (Zeitraum noch nicht festgelegt)"));
+    if (Object.keys(used).length) state.units.forEach(function (u) { if (used[u.id]) legend.append(h("span", null, h("i", { class: "sw c" + colorOf(u.id) }), u.name)); });
+    else legend.append(h("span", null, h("i", { class: "sw" }), "Unterkunft noch offen"));
+  }
+
+  function renderUnits() {
+    var box = $("#units"), note = $("#unitsNote"), list = stays(), map = visibleMap();
+    box.replaceChildren();
+    var vis = state.isAdmin || state.release.released;
+    note.textContent = vis ? (state.isAdmin ? "So seht ihr die aktuelle Planung. Gäste sehen sie erst nach der Freigabe." : "So sind die Gäste verteilt.") : "Die Zuteilung folgt, sobald alle Zeiten eingetragen sind.";
+    if (!state.units.length) {
+      box.append(h("div", { class: "empty card", style: "grid-column:1/-1" }, state.loaded ? (state.isAdmin ? "Noch keine Häuser. Legt sie unten bei den Einstellungen an." : "Die Häuser werden gerade eingetragen.") : "Wird geladen …"));
+      return;
+    }
+    state.units.forEach(function (u) {
+      var beds = +u.beds || 0, max = Math.max(+u.max || 0, beds);
+      var card = h("article", { class: "unit" },
+        u.group ? h("p", { class: "eyebrow" }, u.group) : null,
+        h("div", { class: "u-title" }, h("i", { class: "sw c" + colorOf(u.id) }), h("h3", null, u.name)),
+        h("p", { class: "u-meta" }, beds + " Betten" + (max > beds ? " · bis " + max + " mit Aufbettung" : "")));
+      if (u.note) card.append(h("p", { class: "hint" }, u.note));
+      if (vis) {
+        var assigned = list.filter(function (s) { return map[s.id] === u.id; });
+        if (state.isAdmin) {
+          var peak = peakFor(u.id, map, list), cls = "chip ok", txt = "Spitze " + peak + " von " + beds;
+          if (peak > max) { cls = "chip bad"; txt = "Überbelegt: " + peak + " von max. " + max; }
+          else if (peak > beds) { cls = "chip warn"; txt = "Aufbettung nötig: " + peak + " von " + beds; }
+          if (assigned.length) card.append(h("span", { class: cls, style: "align-self:flex-start" }, txt));
+          var clash = assigned.filter(function (s) { return blockedFor(u, s).length; });
+          if (clash.length) card.append(h("span", { class: "chip bad", style: "align-self:flex-start;white-space:normal" }, "Fremdbuchung im Zeitraum: " + clash.map(function (s) { return s.name; }).join(", ")));
+          if ((u.blocked || []).length) card.append(h("p", { class: "hint" }, "Auf rugenhof.de belegt: " + u.blocked.map(function (r) { return fmtRange(String(r).split("/")); }).join(", ") + (u.asOf ? " (Stand " + u.asOf + ")" : "")));
+        }
+        if (assigned.length) card.append(h("ul", null, assigned.map(function (s) {
+          return h("li", null, h("span", null, s.name + " (" + s.persons + ")"), h("span", null, dm(pd(s.from)) + "–" + dm(pd(s.to))));
+        })));
+        else card.append(h("p", { class: "hint" }, "Noch niemand zugeteilt."));
+      }
+      box.append(card);
+    });
+  }
+
+  function adminBusy() {
+    var a = document.activeElement;
+    return !!(a && $("#adminBody").contains(a) && a.matches("input, textarea"));
+  }
+
+  function renderAdmin() {
+    var sec = $("#admin"); sec.hidden = !state.isAdmin;
+    if (!state.isAdmin) return;
+    if (adminBusy()) { state.pendingAdmin = true; return; }
+    state.pendingAdmin = false;
+    var body = $("#adminBody"); body.replaceChildren();
+    var list = stays(), clean = cleanPlan();
+    var rel = state.release.released, changed = rel && !sameMap(clean, state.release.map);
+    var open = list.filter(function (s) { return !clean[s.id]; }).length;
+    var clashes = list.filter(function (s) { var uo = clean[s.id] ? state.units[unitIndex(clean[s.id])] : null; return uo && blockedFor(uo, s).length; }).length;
+    var clashTxt = clashes ? " " + clashes + (clashes === 1 ? " Zuteilung kollidiert" : " Zuteilungen kollidieren") + " mit einer Fremdbuchung." : "";
+
+    var status = !rel ? "Noch nicht freigegeben. Gäste sehen nur die Zeiten."
+      : changed ? "Freigegeben. Es gibt Änderungen, die Gäste noch nicht sehen." : "Freigegeben. Alle Gäste sehen die aktuelle Zuteilung.";
+    var relBox = h("div", { class: "card" },
+      h("div", { style: "display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between" },
+        h("div", null, h("h3", null, "Sichtbarkeit für Gäste"), h("p", { class: "muted", style: "margin-top:4px" }, status + " " + (open ? open + (open === 1 ? " Eintrag hat" : " Einträge haben") + " noch keine Unterkunft." : (list.length ? "Alle Einträge sind zugeteilt." : "")) + clashTxt)),
+        h("div", { class: "actions", style: "margin:0" },
+          !rel ? h("button", { class: "btn", type: "button", onclick: publishRelease }, "Zuteilung freigeben") : null,
+          changed ? h("button", { class: "btn", type: "button", onclick: publishRelease }, "Änderungen veröffentlichen") : null,
+          rel ? h("button", { class: "btn ghost", type: "button", onclick: withdraw }, "Freigabe zurückziehen") : null)));
+    body.append(h("div", { class: "admin-block", style: "margin-top:0" }, relBox));
+
+    var tbody = h("tbody");
+    if (!list.length) tbody.append(h("tr", null, h("td", { colspan: 5, class: "muted" }, "Sobald sich Gäste eintragen, könnt ihr sie hier zuteilen.")));
+    list.forEach(function (s) {
+      var sel = h("select", { "aria-label": "Unterkunft für " + s.name, onchange: function (e) { assign(s.id, e.target.value); } },
+        h("option", { value: "" }, "– offen –"),
+        state.units.map(function (u) { return h("option", { value: u.id, selected: clean[s.id] === u.id }, u.name); }));
+      var del = h("button", { class: "btn ghost small", type: "button" }, "Löschen");
+      arm(del, "Löschen", "Sicher?", function () { removeStay(s.id); });
+      var nights = (pd(s.to) - pd(s.from)) / DAY;
+      tbody.append(h("tr", null,
+        h("td", null, h("b", null, s.name), s.note ? h("div", { class: "hint" }, s.note) : null),
+        h("td", null, String(s.persons)),
+        h("td", null, dm(pd(s.from)) + " – " + dm(pd(s.to)), h("div", { class: "hint" }, nights + (nights === 1 ? " Nacht" : " Nächte"))),
+        h("td", null, sel, (function () {
+          var uo = clean[s.id] ? state.units[unitIndex(clean[s.id])] : null, cf = uo ? blockedFor(uo, s) : [];
+          return cf.length ? h("div", { class: "chip bad", style: "margin-top:6px;white-space:normal" }, "Belegt: " + cf.map(fmtRange).join(", ")) : null;
+        })()),
+        h("td", null, h("div", { class: "acts" }, h("button", { class: "btn ghost small", type: "button", onclick: function () { editStay(s); } }, "Bearbeiten"), del))));
+    });
+    body.append(h("div", { class: "admin-block" },
+      h("h3", null, "Gäste den Häusern zuordnen"),
+      h("div", { class: "scroll" }, h("table", { class: "tbl" },
+        h("thead", null, h("tr", null, h("th", null, "Gast"), h("th", null, "Pers."), h("th", null, "Zeitraum"), h("th", null, "Unterkunft"), h("th", null, ""))), tbody)),
+      h("div", { class: "actions" }, h("button", { class: "btn ghost", type: "button", onclick: newManual }, "Gast manuell hinzufügen"))));
+
+    var W0 = weddingRange();
+    var wf = h("input", { id: "s-wedf", type: "date", value: W0 ? fd(W0.from) : "" });
+    var wt = h("input", { id: "s-wedt", type: "date", value: W0 ? fd(W0.to) : "" });
+    var swd = function () { saveWedding(wf.value, wt.value); };
+    wf.addEventListener("change", swd); wt.addEventListener("change", swd);
+    var uBox = h("div");
+    state.units.forEach(function (u, i) {
+      var nm = h("input", { type: "text", maxlength: 40, value: u.name, "aria-label": "Name" });
+      var bd = h("input", { type: "number", min: 1, max: 60, value: +u.beds || 1, "aria-label": "Betten" });
+      var mx = h("input", { type: "number", min: 1, max: 80, value: Math.max(+u.max || 0, +u.beds || 1), "aria-label": "Maximal" });
+      var nt = h("input", { type: "text", maxlength: 120, value: u.note || "", "aria-label": "Notiz" });
+      var save = function () { saveUnit(u.id, nm.value, bd.value, mx.value, nt.value, u.order == null ? i : u.order); };
+      [nm, bd, mx, nt].forEach(function (el) { el.addEventListener("change", save); });
+      var del = h("button", { class: "btn ghost small", type: "button" }, "Entfernen");
+      arm(del, "Entfernen", "Sicher?", function () { removeUnit(u.id); });
+      uBox.append(h("div", { class: "ue" },
+        h("div", { class: "field" }, h("label", null, "Name"), nm), h("div", { class: "field" }, h("label", null, "Betten"), bd),
+        h("div", { class: "field" }, h("label", null, "Max. mit Aufbettung"), mx), h("div", { class: "field" }, h("label", null, "Notiz"), nt), del));
+    });
+    body.append(h("div", { class: "admin-block" },
+      h("h3", null, "Einstellungen"),
+      h("div", { class: "card" },
+        h("div", { class: "fields" },
+          h("div", { class: "field" }, h("label", { for: "s-wedf" }, "Hochzeit von"), wf),
+          h("div", { class: "field" }, h("label", { for: "s-wedt" }, "Hochzeit bis"), wt, h("span", { class: "hint" }, "Wird in der Übersicht markiert."))),
+        h("h3", { style: "margin-top:22px" }, "Häuser"),
+        h("p", { class: "hint", style: "margin-top:4px" }, "Namen, Betten und Fremdbuchungen stammen von rugenhof.de. Änderungen an Name, Betten und Notiz gelten sofort."),
+        uBox,
+        h("div", { class: "actions" }, h("button", { class: "btn ghost", type: "button", onclick: addUnit }, "Haus hinzufügen")))));
+  }
+
+  function renderFoot() {
+    var el = $("#footAuth"); el.replaceChildren();
+    if (state.isAdmin) { el.append("Angemeldet als Brautpaar · ", h("button", { class: "linkbtn", type: "button", onclick: logout }, "Abmelden")); }
+    else el.append(h("button", { class: "linkbtn", type: "button", onclick: openLogin }, "Brautpaar-Login"));
+  }
+
+  /* ---------- couple actions ---------- */
+  function refreshAfter(p) { return p.then(refresh); }
+  function assign(stayId, unitId) {
+    var map = Object.assign({}, state.plan.map);
+    if (unitId) map[stayId] = unitId; else delete map[stayId];
+    state.plan = { map: map }; queue();
+    write(function () { return state.api.setAssignment(stayId, unitId); });
+  }
+  function publishRelease() {
+    var map = cleanPlan();
+    write(function () { return refreshAfter(state.api.setRelease(true, map)); }, "Zuteilung ist für alle Gäste sichtbar.");
+  }
+  function withdraw() {
+    write(function () { return refreshAfter(state.api.setRelease(false, {})); }, "Freigabe zurückgezogen. Gäste sehen die Zuteilung nicht mehr.");
+  }
+  function removeStay(id) {
+    write(function () { return refreshAfter(state.api.adminDeleteStay(id)); }, "Eintrag gelöscht.");
+  }
+  function saveWedding(from, to) {
+    var f = okDate(from) ? from : "", t = okDate(to) && f && pd(to) >= pd(f) ? to : f;
+    write(function () { return refreshAfter(state.api.saveConfig(f, t)); }, "Hochzeitszeitraum gespeichert.");
+  }
+  function saveUnit(id, name, beds, max, note, order) {
+    var b = Math.max(1, Math.min(60, Math.round(+beds) || 1)), m = Math.max(b, Math.min(80, Math.round(+max) || b));
+    var ex = state.units[unitIndex(id)] || {};
+    var u = { id: id, name: String(name).trim() || "Haus", group: ex.group || "", beds: b, max: m, note: String(note).trim(), order: order, blocked: ex.blocked || [], asOf: ex.asOf || "" };
+    write(function () { return refreshAfter(state.api.saveUnit(u)); }, "Haus gespeichert.");
+  }
+  function addUnit() {
+    var u = { id: "u" + Date.now().toString(36), name: "Neues Haus", group: "", beds: 8, max: 8, note: "", order: state.units.length, blocked: [], asOf: "" };
+    write(function () { return refreshAfter(state.api.saveUnit(u)); }, "Haus angelegt.");
+  }
+  function removeUnit(id) {
+    write(function () { return refreshAfter(state.api.deleteUnit(id)); }, "Haus entfernt.");
+  }
+
+  /* ---------- login ---------- */
+  function openLogin() {
+    $("#loginHint").textContent = state.demo ? "Vorschau-Modus: Hier funktionieren beliebige Eingaben." : "";
+    $("#loginBox").hidden = false; $("#l-email").focus();
+  }
+  function onLogin(e) {
+    e.preventDefault();
+    var email = $("#l-email").value.trim(), pw = $("#l-pw").value;
+    if (!state.demo && (!email || !pw)) { say("Bitte gib E-Mail und Passwort ein.", true); return; }
+    state.api.signIn(email, pw).then(function () { return state.demo ? true : state.api.isAdmin(); }).then(function (ok) {
+      if (!ok) { say("Mit diesem Konto könnt ihr die Zuteilung nicht bearbeiten.", true); return state.api.signOut(); }
+      state.isAdmin = true; $("#l-pw").value = ""; $("#loginBox").hidden = true;
+      return refresh().then(function () { say("Angemeldet."); });
+    }).catch(function () { say("Anmeldung fehlgeschlagen. Prüft E-Mail und Passwort.", true); });
+  }
+  function logout() {
+    Promise.resolve(state.api.signOut()).then(function () {
+      state.isAdmin = false; state.plan = { map: {} }; state.adminEditId = null;
+      loadForm(state.currentId ? rawStay(state.currentId) : null); queue();
+    });
+  }
+
+  /* ---------- the stay form ---------- */
+  var F = {};
+  function formId() { return state.adminEditId || state.currentId; }
+  function loadForm(s) {
+    F.name.value = s ? s.name : ""; F.persons.value = s ? s.persons : 1;
+    F.from.value = s && okDate(s.from) ? s.from : ""; F.to.value = s && okDate(s.to) ? s.to : ""; F.note.value = s ? (s.note || "") : "";
+    state.dirty = false; formChrome();
+  }
+  function formChrome() {
+    var aid = state.adminEditId, exists = !!(formId() && rawStay(formId()));
+    var h2 = $("#mine-h"), sub = $("#mine-sub");
+    if (aid) { h2.textContent = exists ? "Eintrag bearbeiten" : "Gast manuell hinzufügen"; sub.textContent = "Ihr tragt hier für jemanden ein, der sich nicht selbst eintragen kann."; }
+    else { h2.textContent = "Dein Aufenthalt"; sub.textContent = exists ? "Du kannst deine Angaben jederzeit ändern." : "Trag ein, wann du kommst und wann du fährst."; }
+    F.del.hidden = !exists; F.back.hidden = !aid;
+    F.save.textContent = exists ? "Änderungen speichern" : "Eintrag speichern";
+  }
+  function formMsg(t, err) { var m = $("#formMsg"); m.textContent = t || ""; m.className = "msg" + (err ? " err" : ""); }
+  function switchTo(id) {
+    state.currentId = id; loadForm(id ? rawStay(id) : null); formMsg(""); renderMine();
+  }
+  function editStay(s) {
+    state.adminEditId = s.id; loadForm(rawStay(s.id)); formMsg(""); renderMine();
+    $("#mine").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  function newManual() {
+    state.adminEditId = uuid(); loadForm(null); formMsg(""); renderMine();
+    $("#mine").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  function backToOwn() {
+    state.adminEditId = null; loadForm(state.currentId ? rawStay(state.currentId) : null); formMsg(""); renderMine();
+  }
+
+  function onSubmit(e) {
+    e.preventDefault();
+    var name = F.name.value.trim(), persons = Math.round(+F.persons.value), from = F.from.value, to = F.to.value, note = F.note.value.trim();
+    if (!name) { formMsg("Bitte gib deinen Namen an.", true); F.name.focus(); return; }
+    if (!(persons >= 1 && persons <= 40)) { formMsg("Die Personenzahl muss zwischen 1 und 40 liegen.", true); F.persons.focus(); return; }
+    if (!okDate(from)) { formMsg("Bitte wähle den Anreisetag.", true); F.from.focus(); return; }
+    if (!okDate(to)) { formMsg("Bitte wähle den Abreisetag.", true); F.to.focus(); return; }
+    if (pd(to) <= pd(from)) { formMsg("Die Abreise muss nach der Anreise liegen.", true); F.to.focus(); return; }
+    formMsg("");
+    if (state.adminEditId) {
+      var aid = state.adminEditId, entry = { id: aid, name: name, persons: persons, from: from, to: to, note: note, manual: !isMine(aid) };
+      write(function () { return refreshAfter(state.api.adminSaveStay(entry)); }, "Eintrag gespeichert.").then(function (ok) {
+        if (ok) { state.adminEditId = null; loadForm(state.currentId ? rawStay(state.currentId) : null); renderMine(); }
+      });
+      return;
+    }
+    var id = state.currentId || uuid(), m = mineEntry(id), secret = m ? m.secret : newSecret();
+    var e2 = { id: id, secret: secret, name: name, persons: persons, from: from, to: to, note: note };
+    write(function () { return state.api.saveStay(e2); }, "Gespeichert. Du kannst alles später noch ändern.").then(function (ok) {
+      if (!ok) return;
+      if (!m) { state.mine.push({ id: id, secret: secret }); saveMine(); }
+      state.currentId = id; state.dirty = false;
+      return refresh().then(function () { formChrome(); });
+    });
+  }
+
+  function doDelete() {
+    var id = formId(); if (!id) return;
+    if (state.adminEditId) {
+      write(function () { return refreshAfter(state.api.adminDeleteStay(id)); }, "Eintrag gelöscht.").then(function () {
+        state.adminEditId = null; loadForm(state.currentId ? rawStay(state.currentId) : null); renderMine();
+      });
+      return;
+    }
+    var m = mineEntry(id);
+    if (!m) { say("Diesen Eintrag kannst du nur mit seinem Bearbeitungslink löschen.", true); return; }
+    write(function () { return state.api.deleteStay(id, m.secret); }, "Eintrag gelöscht.").then(function (ok) {
+      if (!ok) return;
+      state.mine = state.mine.filter(function (x) { return x.id !== id; }); saveMine();
+      state.currentId = null;
+      return refresh().then(function () { loadForm(null); renderMine(); });
+    });
+  }
+
+  /* ---------- loading ---------- */
+  function afterLoad() {
+    if (!state.formReady) {
+      state.formReady = true;
+      var first = state.mine.map(function (m) { return rawStay(m.id); }).filter(Boolean)[0];
+      if (first) { state.currentId = first.id; loadForm(first); } else formChrome();
+    } else if (state.currentId && !rawStay(state.currentId) && !state.dirty && !state.adminEditId) {
+      state.currentId = null; loadForm(null);
+    } else formChrome();
+  }
+  function refresh() {
+    return state.api.loadPublic().then(function (d) {
+      state.units = d.units; state.stays = d.stays; state.config = d.config; state.release = d.release;
+      state.failed = ""; state.loaded = true;
+      if (state.isAdmin) return state.api.loadPlan().then(function (m) { state.plan = { map: m }; });
+    }).then(function () { afterLoad(); queue(); }, function () {
+      state.failed = "Die Daten lassen sich gerade nicht laden. Prüfe deine Verbindung und lade die Seite neu."; queue();
+    });
+  }
+
+  function init() {
+    F = { name: $("#f-name"), persons: $("#f-persons"), from: $("#f-from"), to: $("#f-to"), note: $("#f-note"), save: $("#saveBtn"), del: $("#deleteBtn"), back: $("#backBtn") };
+    $("#stayForm").addEventListener("submit", onSubmit);
+    $("#stayForm").addEventListener("input", function () { state.dirty = true; });
+    F.from.addEventListener("change", function () { F.to.min = F.from.value; });
+    F.back.addEventListener("click", backToOwn);
+    arm(F.del, "Eintrag löschen", "Wirklich löschen?", doDelete);
+    $("#loginForm").addEventListener("submit", onLogin);
+    $("#loginCancel").addEventListener("click", function () { $("#loginBox").hidden = true; });
+    $("#adminBody").addEventListener("focusout", function () { if (state.pendingAdmin) setTimeout(queue, 0); });
+
+    state.mine = loadMine(); consumeHash();
+    if (CFG.supabaseUrl && CFG.supabaseAnonKey && window.supabase && window.supabase.createClient) state.api = makeSupabaseApi(CFG.supabaseUrl, CFG.supabaseAnonKey);
+    else { state.api = makeDemoApi(); state.demo = true; }
+    formChrome(); renderAll();
+
+    state.api.session().then(function (s) { return s ? state.api.isAdmin() : false; }).catch(function () { return false; }).then(function (ok) {
+      state.isAdmin = !!ok; return refresh();
+    });
+    setInterval(function () { if (!document.hidden && !state.dirty && !adminBusy()) refresh(); }, 20000);
+  }
+  init();
+})();
+</script>
+</body>
+</html>
