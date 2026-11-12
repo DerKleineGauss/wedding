@@ -1,0 +1,21 @@
+---
+import Base from "@/layouts/Base.astro";
+import PageHead from "@/components/common/PageHead.astro";
+import Rides from "@/components/rides/Rides";
+import pano from "@/assets/img/pano.jpg";
+---
+
+<Base title="Fahrgemeinschaft">
+  <PageHead
+    eyebrow="Gemeinsam nach Rügen"
+    title="Fahrgemeinschaften"
+    intro="Wer mit dem Auto kommt und Plätze frei hat, trägt sich hier ein. Wer eine Mitfahrt sucht, auch. Ihr seht sofort, was zusammenpasst, und sprecht euch dann direkt ab."
+    image={pano}
+    alt="Weiter Blick über Felder und Bodden auf Rügen"
+  />
+  <div class="container-page">
+    <Rides client:only="react">
+      <div slot="fallback" class="h-96 animate-pulse rounded-2xl bg-secondary"></div>
+    </Rides>
+  </div>
+</Base>

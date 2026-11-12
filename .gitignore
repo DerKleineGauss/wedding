@@ -1,0 +1,14 @@
+# Secrets
+dbpw.txt
+.env
+.env.*
+!.env.example
+
+# Rohfotos (groß, teils HEIC); bearbeitete Versionen liegen in web/src/assets
+website/assets/
+
+# Node / Astro
+node_modules/
+dist/
+.astro/
+.netlify/

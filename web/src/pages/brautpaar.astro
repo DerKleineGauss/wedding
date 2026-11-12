@@ -1,0 +1,16 @@
+---
+import Base from "@/layouts/Base.astro";
+import AdminApp from "@/components/admin/AdminApp";
+---
+
+<Base title="Brautpaar">
+  <div class="container-page grid gap-6 pt-10">
+    <div class="grid gap-2">
+      <p class="eyebrow">Nur für euch</p>
+      <h1 class="text-[clamp(30px,5vw,44px)] font-bold">Zuteilung und Verwaltung</h1>
+    </div>
+    <AdminApp client:only="react">
+      <div slot="fallback" class="h-64 animate-pulse rounded-2xl bg-secondary"></div>
+    </AdminApp>
+  </div>
+</Base>

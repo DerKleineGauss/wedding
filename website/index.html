@@ -4,21 +4,25 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Rugenhof Gästeplan</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Unterkunftsplanung für unsere Hochzeit auf dem Rugenhof, Rügen, 16.–18. August 2027.">
+<meta name="theme-color" content="#12303A">
+<link rel="preload" as="image" href="img/hero-sm.jpg" imagesrcset="img/hero-sm.jpg 1000w, img/hero.jpg 2000w" imagesizes="100vw">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600&display=swap">
 <style>
 /* Layout: one calm column. Hero line, own stay form, a night-by-night strip of who is on the farm, the houses, and a couple-only control block. */
 :root {
   /* Palette: chalk (Kreide), Bodden ink, one loud accent (Sanddorn) for the wedding nights, hues per Haus */
   color-scheme: light;
-  --bg: #F1F5F4;
-  --surface: #FFFFFF;
-  --surface-2: #E7EEED;
+  --bg: #F6F2EA;
+  --surface: #FFFDF9;
+  --surface-2: #EDE7DA;
   --ink: #12303A;
-  --muted: #546E77;
-  --line: #D2DDDC;
-  --we: #EDF2F1;
+  --muted: #52676D;
+  --line: #DDD5C5;
+  --we: #F1ECE1;
   --btn: #12303A;
-  --btn-ink: #F1F5F4;
+  --btn-ink: #F6F2EA;
   --wed: #D9730D;
   --wed-tint: #FBEBD6;
   --ok: #25704A;
@@ -181,23 +185,62 @@ input:disabled, select:disabled { opacity: 0.55; }
   .ue { grid-template-columns: 1fr 1fr; }
   .ue .field:first-child, .ue .field:nth-child(4) { grid-column: 1 / -1; }
 }
+
+/* ---- Photos & layout polish ---- */
+.hero { position: relative; isolation: isolate; color: #fff; min-height: clamp(380px, 68vh, 640px); display: flex; align-items: flex-end; background: #12303A; overflow: hidden; }
+.hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; z-index: -2; }
+.hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, rgba(9,24,29,.86) 0%, rgba(9,24,29,.5) 38%, rgba(9,24,29,.08) 72%, rgba(9,24,29,.28) 100%); }
+.hero-in { width: 100%; max-width: 1100px; margin: 0 auto; padding-block: 56px 34px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-wrap: wrap; gap: 18px 28px; align-items: flex-end; justify-content: space-between; }
+.hero .eyebrow { color: rgba(255,255,255,.88); }
+.hero .eyebrow b { color: #FFC37A; font-weight: 700; }
+.hero h1 { font-size: clamp(38px, 8.5vw, 72px); letter-spacing: -0.025em; text-shadow: 0 2px 24px rgba(0,0,0,.35); margin-top: 8px; }
+.hero .intro { max-width: 56ch; margin-top: 14px; font-size: 17px; line-height: 1.5; color: rgba(255,255,255,.92); }
+.hero .chip { box-shadow: 0 2px 12px rgba(0,0,0,.25); }
+.wrap { padding-block: 8px 72px; }
+.banner:first-child, .mine-unit:first-child { margin-top: 24px; }
+section { margin-top: 52px; }
+h2 { font-size: clamp(24px, 3.6vw, 30px); }
+.card { border-radius: 16px; padding: 24px; box-shadow: 0 1px 2px rgba(18,48,58,.05), 0 8px 24px -12px rgba(18,48,58,.12); }
+.scroll, .unit { border-radius: 16px; }
+.unit { box-shadow: 0 1px 2px rgba(18,48,58,.05); }
+.btn { border-radius: 10px; transition: transform .12s ease, box-shadow .12s ease; }
+.btn:not(:disabled):hover { transform: translateY(-1px); box-shadow: 0 6px 16px -8px rgba(18,48,58,.5); }
+.pano { margin: 56px 0 0; border-radius: 18px; overflow: hidden; aspect-ratio: 21 / 8; background: var(--surface-2); }
+.pano img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.gallery figure { margin: 0; border-radius: 14px; overflow: hidden; background: var(--surface-2); aspect-ratio: 3 / 2; }
+.gallery figure.big { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; }
+.gallery img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+.gallery figure:hover img { transform: scale(1.03); }
+.gallery .big img { object-position: 50% 30%; }
+@media (max-width: 640px) {
+  .hero { min-height: 560px; }
+  .hero-img { object-position: 64% 20%; }
+  .hero::after { background: linear-gradient(to top, rgba(9,24,29,.94) 0%, rgba(9,24,29,.82) 40%, rgba(9,24,29,.15) 70%, rgba(9,24,29,.25) 100%); }
+  .hero .intro { font-size: 16px; }
+  .gallery { grid-template-columns: repeat(2, 1fr); }
+  .gallery figure.big { grid-column: 1 / -1; grid-row: auto; aspect-ratio: 3 / 2; }
+  .pano { aspect-ratio: 16 / 7; }
+}
+@media (prefers-reduced-motion: reduce) { .btn, .gallery img { transition: none; } .gallery figure:hover img { transform: none; } }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="top">
-      <div>
-        <p class="eyebrow">Ferienanlage Rugenhof · Dreschvitz, Rügen</p>
-        <h1>Rugenhof Gästeplan</h1>
-        <p class="intro">Trag ein, von wann bis wann du auf dem Rugenhof bist. Die Zuteilung zu den Häusern machen wir als Brautpaar. Sobald alle Zeiten da sind, schalten wir sie hier frei.</p>
-      </div>
-      <span id="releaseChip" class="chip"><i></i><span>Zuteilung noch nicht freigegeben</span></span>
+<header class="hero">
+  <img class="hero-img" src="img/hero.jpg" srcset="img/hero-sm.jpg 1000w, img/hero.jpg 2000w" sizes="100vw" width="2000" height="1500" alt="Treibholz am Ufer des Boddens, im Wasser steht eine Frau im orangefarbenen Kleid" fetchpriority="high">
+  <div class="hero-in">
+    <div>
+      <p class="eyebrow"><b>16.–18. August 2027</b> · Ferienanlage Rugenhof · Dreschvitz, Rügen</p>
+      <h1>Rugenhof Gästeplan</h1>
+      <p class="intro">Trag ein, von wann bis wann du auf dem Rugenhof bist. Die Zuteilung zu den Häusern machen wir als Brautpaar. Sobald alle Zeiten da sind, schalten wir sie hier frei.</p>
     </div>
-    <svg class="shore" viewBox="0 0 600 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6 Q25 0 50 6 T100 6 T150 6 T200 6 T250 6 T300 6 T350 6 T400 6 T450 6 T500 6 T550 6 T600 6" fill="none" stroke="currentColor" stroke-width="1.5" vector-effect="non-scaling-stroke"/></svg>
-    <div id="banner" class="banner" hidden></div>
-    <div id="mineUnit" class="mine-unit" hidden></div>
-  </header>
+    <span id="releaseChip" class="chip"><i></i><span>Zuteilung noch nicht freigegeben</span></span>
+  </div>
+</header>
+
+<div class="wrap">
+  <div id="banner" class="banner" hidden></div>
+  <div id="mineUnit" class="mine-unit" hidden></div>
 
   <section id="mine" aria-labelledby="mine-h">
     <div class="sec-head">
@@ -233,6 +276,8 @@ input:disabled, select:disabled { opacity: 0.55; }
     <div id="legend" class="legend"></div>
   </section>
 
+  <figure class="pano"><img src="img/pano.jpg" width="2000" height="587" loading="lazy" alt="Weiter Blick über Felder und Bodden auf Rügen"></figure>
+
   <section aria-labelledby="un-h">
     <div class="sec-head">
       <h2 id="un-h">Die Häuser</h2>
@@ -260,6 +305,18 @@ input:disabled, select:disabled { opacity: 0.55; }
       <div class="actions"><button class="btn" type="submit">Anmelden</button><button class="btn ghost" type="button" id="loginCancel">Abbrechen</button></div>
     </form>
   </div>
+
+  <section aria-labelledby="gal-h">
+    <div class="sec-head"><h2 id="gal-h">Unser Rügen</h2></div>
+    <div class="gallery">
+      <figure class="big"><img src="img/paar.jpg" width="1000" height="667" loading="lazy" alt="Wir beide mit Goldhüten und Partybrillen vor Discolichtern"></figure>
+      <figure><img src="img/bodden-ufer.jpg" width="800" height="533" loading="lazy" alt="Ufer am Bodden mit Treibholz und überhängenden Bäumen"></figure>
+      <figure><img src="img/sandschrift.jpg" width="800" height="533" loading="lazy" alt="Das Wort Rügen aus Muscheln in den Sand gelegt"></figure>
+      <figure><img src="img/sandburgen.jpg" width="800" height="533" loading="lazy" alt="Sandburgen mit Muschelverzierung am Strand"></figure>
+      <figure><img src="img/sandfigur.jpg" width="800" height="533" loading="lazy" alt="Große Figur aus Sand mit Strahlenkranz"></figure>
+      <figure><img src="img/strand.jpg" width="800" height="533" loading="lazy" alt="Strandtag mit Decke und Windschutz"></figure>
+    </div>
+  </section>
 
   <footer class="foot"><span>Ferienanlage Rugenhof · Dreschvitz auf Rügen</span><span id="footAuth"></span></footer>
 </div>
@@ -368,6 +425,7 @@ input:disabled, select:disabled { opacity: 0.55; }
   function unitRow(u) { return { id: u.id, name: u.name, grp: u.group || "", beds: u.beds, max_beds: u.max, note: u.note || "", ord: u.order == null ? 0 : u.order, blocked: u.blocked || [], as_of: u.asOf || "" }; }
 
   function makeSupabaseApi(url, key) {
+    url = String(url).trim().replace(/\/+$/, "").replace(/\/rest\/v1$/, "");
     var sb = window.supabase.createClient(url, key, { auth: { persistSession: true, autoRefreshToken: true } });
     function chk(r) { if (r.error) throw r.error; return r.data; }
     return {

@@ -1,0 +1,177 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/bricolage-grotesque";
+@import "@fontsource-variable/figtree";
+
+/* Dark Mode folgt dem System. */
+@custom-variant dark (@media (prefers-color-scheme: dark));
+
+@theme inline {
+  --font-heading: 'Bricolage Grotesque Variable', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
+  --font-sans: 'Figtree Variable', 'Segoe UI', system-ui, -apple-system, sans-serif;
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+
+  /* Projektfarben */
+  --color-sanddorn: var(--sanddorn);
+  --color-sanddorn-tint: var(--sanddorn-tint);
+  --color-weekend: var(--weekend);
+  --color-ok: var(--ok);
+  --color-ok-tint: var(--ok-tint);
+  --color-warn: var(--warn);
+  --color-warn-tint: var(--warn-tint);
+  --color-bad: var(--bad);
+  --color-bad-tint: var(--bad-tint);
+  --color-u0: var(--u0);
+  --color-u1: var(--u1);
+  --color-u2: var(--u2);
+  --color-u3: var(--u3);
+  --color-u4: var(--u4);
+  --color-u5: var(--u5);
+  --color-u6: var(--u6);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* Kreide (hell) und Bodden-Tinte (dunkel), Sanddorn als einziger lauter Akzent. */
+:root {
+  --background: #F6F2EA;
+  --foreground: #12303A;
+  --card: #FFFDF9;
+  --card-foreground: #12303A;
+  --popover: #FFFDF9;
+  --popover-foreground: #12303A;
+  --primary: #12303A;
+  --primary-foreground: #F6F2EA;
+  --secondary: #EDE7DA;
+  --secondary-foreground: #12303A;
+  --muted: #EDE7DA;
+  --muted-foreground: #52676D;
+  --accent: #FBEBD6;
+  --accent-foreground: #7A3F05;
+  --destructive: #B3261E;
+  --border: #DDD5C5;
+  --input: #D2C9B7;
+  --ring: #D9730D;
+  --radius: 0.75rem;
+
+  --sanddorn: #D9730D;
+  --sanddorn-tint: #FBEBD6;
+  --weekend: #F1ECE1;
+  --ok: #25704A;
+  --ok-tint: #DDF1E5;
+  --warn: #8A5A00;
+  --warn-tint: #FFF0CC;
+  --bad: #B3261E;
+  --bad-tint: #FCE2DF;
+  --u0: #5A7079;
+  --u1: #2B7C86;
+  --u2: #5B5BA6;
+  --u3: #8A6A12;
+  --u4: #A8475A;
+  --u5: #3E7D43;
+  --u6: #8A3E8E;
+
+  --shadow-soft: 0 1px 2px rgb(18 48 58 / 0.05), 0 8px 24px -12px rgb(18 48 58 / 0.14);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0E1A1F;
+    --foreground: #E4EEEC;
+    --card: #15262D;
+    --card-foreground: #E4EEEC;
+    --popover: #15262D;
+    --popover-foreground: #E4EEEC;
+    --primary: #E4EEEC;
+    --primary-foreground: #0E1A1F;
+    --secondary: #1C323A;
+    --secondary-foreground: #E4EEEC;
+    --muted: #1C323A;
+    --muted-foreground: #93AAB2;
+    --accent: #3A2A14;
+    --accent-foreground: #F6C98C;
+    --destructive: #FF9B92;
+    --border: #2A424B;
+    --input: #34505A;
+    --ring: #F0A03A;
+
+    --sanddorn: #F0A03A;
+    --sanddorn-tint: #3A2A14;
+    --weekend: #182B32;
+    --ok: #7AD3A0;
+    --ok-tint: #173A28;
+    --warn: #E8BC52;
+    --warn-tint: #3A2F10;
+    --bad: #FF9B92;
+    --bad-tint: #43201D;
+    --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -12px rgb(0 0 0 / 0.5);
+    color-scheme: dark;
+  }
+}
+
+@layer base {
+  * { @apply border-border outline-ring/50; }
+  html { @apply font-sans; -webkit-text-size-adjust: 100%; }
+  body { @apply bg-background text-foreground; font-size: 15px; line-height: 1.5; }
+  h1, h2, h3 { font-family: var(--font-heading); line-height: 1.12; text-wrap: balance; }
+  button:not(:disabled), [role="button"]:not(:disabled) { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+}
+
+/* Native Seitenübergänge zwischen den Astro-Seiten, ohne JS. */
+@view-transition { navigation: auto; }
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+}
+
+@layer components {
+  .eyebrow { @apply text-xs font-semibold tracking-[0.09em] uppercase text-muted-foreground; }
+  .shadow-soft { box-shadow: var(--shadow-soft); }
+  .container-page {
+    max-width: 1120px;
+    margin-inline: auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  .tabular { font-variant-numeric: tabular-nums; }
+}
+
+/* ---- Zeitleiste: eine Spalte pro Nacht, sticky Namensspalte ---- */
+.tl { --cw: 38px; --namew: 196px; width: max-content; min-width: 100%; }
+@media (max-width: 640px) { .tl { --cw: 34px; --namew: 136px; } }
+.tl-row { display: grid; grid-template-columns: var(--namew) repeat(var(--n), var(--cw)); border-bottom: 1px solid var(--border); }
+.tl-row:last-child { border-bottom: 0; }
+.tl-row > * { grid-row: 1; min-width: 0; }
+.tl-name { grid-column: 1; position: sticky; left: 0; z-index: 3; background: var(--card); padding: 8px 12px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--border); }
+.tl-cell { border-left: 1px solid var(--border); transition: background-color .12s; }
+.tl-cell[data-we] { background: var(--weekend); }
+.tl-cell[data-wed] { background: var(--sanddorn-tint); }
+.tl-cell[data-sel] { background: color-mix(in oklab, var(--sanddorn) 18%, var(--card)); }
+.tl-bar { align-self: center; z-index: 1; margin: 7px 3px; min-height: 28px; border-radius: 8px; color: #fff; font-size: 12px; font-weight: 600; padding: 0 8px; display: flex; align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; pointer-events: none; }
+.tl-row[data-me] .tl-bar { box-shadow: 0 0 0 2px var(--card), 0 0 0 4px var(--sanddorn); }

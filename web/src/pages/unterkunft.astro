@@ -1,0 +1,21 @@
+---
+import Base from "@/layouts/Base.astro";
+import PageHead from "@/components/common/PageHead.astro";
+import GuestPlan from "@/components/stays/GuestPlan";
+import boddenUfer from "@/assets/img/bodden-ufer.jpg";
+---
+
+<Base title="Unterkunft">
+  <PageHead
+    eyebrow="Gästeplan · Ferienanlage Rugenhof"
+    title="Wer schläft wann wo"
+    intro="Trag ein, von wann bis wann du auf dem Rugenhof bist, gern auch ein paar Tage vor oder nach der Hochzeit. Die Häuser teilen wir als Brautpaar zu und schalten die Zuteilung hier frei, sobald alle Zeiten da sind."
+    image={boddenUfer}
+    alt="Ufer am Bodden mit Treibholz und überhängenden Bäumen"
+  />
+  <div class="container-page">
+    <GuestPlan client:only="react">
+      <div slot="fallback" class="h-96 animate-pulse rounded-2xl bg-secondary"></div>
+    </GuestPlan>
+  </div>
+</Base>

@@ -1,4 +1,26 @@
-# Rugenhof Gästeplan: Einrichtung in etwa 30 Minuten
+# Hochzeit Rugenhof
+
+## Neue Seite (`web/`, Astro + React)
+
+```bash
+cd web
+npm install
+cp .env.example .env      # PUBLIC_SUPABASE_URL / PUBLIC_SUPABASE_KEY eintragen (leer = Demo-Modus)
+npm run dev               # http://localhost:4321
+npm test                  # Vitest
+npm run check && npm run build   # → web/dist
+```
+
+**Datenbank:** Dateien aus `supabase/migrations/` der Reihe nach im Supabase-SQL-Editor ausführen (idempotent). Für die Fahrgemeinschaft: `20261112000000_rides.sql`.
+
+**Netlify:** Repo verbinden (liest `netlify.toml`) und unter *Site configuration → Environment variables* `PUBLIC_SUPABASE_URL` und `PUBLIC_SUPABASE_KEY` setzen. Alternativ lokal bauen und `web/dist` per Drag-and-drop hochladen.
+
+Seiten: `/` Start, `/unterkunft` Gästeplan, `/fahrgemeinschaft`, `/brautpaar` Zuteilung (Login).
+
+---
+
+## Alte Seite (`website/`): Einrichtung
+
 
 Die Seite besteht aus drei Teilen. Ihr braucht dafür zwei kostenlose Konten, aber keine Programmierkenntnisse.
 

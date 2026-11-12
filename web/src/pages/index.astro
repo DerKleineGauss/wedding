@@ -1,0 +1,128 @@
+---
+import { Picture } from "astro:assets";
+import Base from "@/layouts/Base.astro";
+import Countdown from "@/components/common/Countdown";
+import hero from "@/assets/img/hero.jpg";
+import paar from "@/assets/img/paar.jpg";
+import boddenUfer from "@/assets/img/bodden-ufer.jpg";
+import sandschrift from "@/assets/img/sandschrift.jpg";
+import sandburgen from "@/assets/img/sandburgen.jpg";
+import sandfigur from "@/assets/img/sandfigur.jpg";
+import strand from "@/assets/img/strand.jpg";
+
+const live = [
+  { href: "/unterkunft", eyebrow: "Jetzt eintragen", title: "Unterkunft", text: "Sag uns, von wann bis wann du da bist. Wir verteilen alle auf die Häuser." },
+  { href: "/fahrgemeinschaft", eyebrow: "Jetzt eintragen", title: "Fahrgemeinschaft", text: "Plätze anbieten oder eine Mitfahrt finden. Spart Geld, Parkplätze und Nerven." },
+];
+const soon = [
+  { title: "Ablauf", text: "Was wann passiert, von der Ankunft bis zum Katerfrühstück." },
+  { title: "Anreise", text: "Mit Bahn, Auto oder Fähre nach Dreschvitz." },
+  { title: "Zusage", text: "Zu- oder Absage, Essenswünsche und Allergien." },
+  { title: "Ideen", text: "Musikwünsche, Spiele, Vorschläge für uns." },
+  { title: "Fotos", text: "Nach der Hochzeit: alle Bilder zum Ansehen und Herunterladen." },
+  { title: "Fragen", text: "Dresscode, Kinder, Hunde, Wetter." },
+];
+const gallery = [
+  { src: paar, alt: "Wir beide mit Goldhüten und Partybrillen vor Discolichtern", big: true },
+  { src: boddenUfer, alt: "Ufer am Bodden mit Treibholz und überhängenden Bäumen" },
+  { src: sandschrift, alt: "Das Wort Rügen aus Muscheln in den Sand gelegt" },
+  { src: sandburgen, alt: "Sandburgen mit Muschelverzierung am Strand" },
+  { src: sandfigur, alt: "Große Figur aus Sand mit Strahlenkranz" },
+  { src: strand, alt: "Strandtag mit Decke und Windschutz" },
+];
+---
+
+<Base title="Start" overlayNav>
+  <script is:inline>
+    // Alte Bearbeitungslinks (vor dem Umbau) zeigten auf die Startseite.
+    if (/^#edit=/.test(location.hash)) location.replace("/unterkunft" + location.hash);
+  </script>
+
+  <section class="relative isolate flex min-h-[min(88vh,760px)] items-end overflow-hidden bg-[#12303A] text-white">
+    <Picture
+      src={hero}
+      alt="Treibholz am Ufer des Boddens, im Wasser steht eine Frau im orangefarbenen Kleid"
+      widths={[800, 1400, 2000]}
+      sizes="100vw"
+      formats={["avif", "webp"]}
+      loading="eager"
+      fetchpriority="high"
+      class="absolute inset-0 -z-20 size-full object-cover object-[64%_25%] md:object-[50%_42%]"
+    />
+    <div class="absolute inset-0 -z-10 bg-gradient-to-t from-[#09181D]/95 via-[#09181D]/45 to-[#09181D]/25"></div>
+
+    <div class="container-page grid w-full gap-8 pt-28 pb-12 md:grid-cols-[1fr_auto] md:items-end md:pb-16">
+      <div class="grid gap-4">
+        <p class="text-sm font-semibold tracking-[0.09em] text-white/85 uppercase">
+          <b class="text-[#FFC37A]">16.–18. August 2027</b> · Ferienanlage Rugenhof · Rügen
+        </p>
+        <h1 class="text-[clamp(48px,11vw,112px)] leading-[0.95] font-bold tracking-[-0.035em] [text-shadow:0_2px_24px_rgb(0_0_0/0.35)]">
+          Wir heiraten<br />am Bodden.
+        </h1>
+        <p class="max-w-[52ch] text-[17px] text-white/90">
+          Drei Tage mit euch auf Rügen. Hier findet ihr alles, was ihr zum Planen braucht, und nach dem Fest auch die Fotos.
+        </p>
+      </div>
+      <Countdown client:only="react" target="2027-08-16T14:00:00+02:00">
+        <div slot="fallback" class="h-16"></div>
+      </Countdown>
+    </div>
+  </section>
+
+  <div class="container-page grid gap-20 pt-14">
+    <section aria-labelledby="now-h" class="grid gap-5">
+      <h2 id="now-h" class="text-[clamp(26px,4vw,36px)] font-bold">Was jetzt schon geht</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        {
+          live.map((c) => (
+            <a href={c.href} class="group grid gap-2 rounded-3xl border bg-card p-6 shadow-soft transition hover:-translate-y-0.5 hover:border-sanddorn md:p-8">
+              <p class="eyebrow text-sanddorn">{c.eyebrow}</p>
+              <h3 class="flex items-center justify-between text-2xl font-bold">
+                {c.title}
+                <span class="text-sanddorn transition group-hover:translate-x-1" aria-hidden="true">→</span>
+              </h3>
+              <p class="text-muted-foreground">{c.text}</p>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section aria-labelledby="soon-h" class="grid gap-5">
+      <div class="flex flex-wrap items-baseline gap-x-4">
+        <h2 id="soon-h" class="text-[clamp(26px,4vw,36px)] font-bold">Kommt bald</h2>
+        <p class="text-muted-foreground">Wir füllen die Seite nach und nach.</p>
+      </div>
+      <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          soon.map((c) => (
+            <li class="grid gap-1 rounded-2xl border border-dashed p-5">
+              <h3 class="text-lg font-semibold">{c.title}</h3>
+              <p class="text-sm text-muted-foreground">{c.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section aria-labelledby="gal-h" class="grid gap-5">
+      <h2 id="gal-h" class="text-[clamp(26px,4vw,36px)] font-bold">Unser Rügen</h2>
+      <div class="grid grid-cols-2 gap-2.5 md:grid-cols-3">
+        {
+          gallery.map((g) => (
+            <figure class:list={["m-0 overflow-hidden rounded-2xl bg-secondary", g.big ? "col-span-2 md:row-span-2" : "aspect-[3/2]"]}>
+              <Picture
+                src={g.src}
+                alt={g.alt}
+                widths={g.big ? [700, 1000] : [400, 800]}
+                sizes={g.big ? "(min-width: 768px) 66vw, 100vw" : "(min-width: 768px) 33vw, 50vw"}
+                formats={["avif", "webp"]}
+                class="size-full object-cover transition duration-500 hover:scale-[1.03] motion-reduce:transition-none"
+              />
+            </figure>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</Base>
