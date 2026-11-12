@@ -914,8 +914,10 @@ input:disabled, select:disabled { opacity: 0.55; }
       state.units = d.units; state.stays = d.stays; state.config = d.config; state.release = d.release;
       state.failed = ""; state.loaded = true;
       if (state.isAdmin) return state.api.loadPlan().then(function (m) { state.plan = { map: m }; });
-    }).then(function () { afterLoad(); queue(); }, function () {
-      state.failed = "Die Daten lassen sich gerade nicht laden. Prüfe deine Verbindung und lade die Seite neu."; queue();
+    }).then(function () { afterLoad(); queue(); }, function (err) {
+      try { console.error("[Gästeplan] loadPublic fehlgeschlagen:", err); } catch (e) {}
+      var detail = err && (err.message || err.code) ? " (Technisch: " + [err.code, err.message].filter(Boolean).join(" – ").slice(0, 200) + ")" : "";
+      state.failed = "Die Daten lassen sich gerade nicht laden. Prüfe deine Verbindung und lade die Seite neu." + detail; queue();
     });
   }
 
