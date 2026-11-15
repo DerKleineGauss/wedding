@@ -18,7 +18,8 @@ Infoseiten (Ablauf, Anreise, FAQ), Zu-/Absage mit Essenswünschen und Allergien 
 
 ## Architektur
 - `web/`: Astro 7 (statisch) + React-19-Islands (`client:only="react"`) + Tailwind v4 + shadcn/ui (Radix, Preset Nova, Komponenten in `src/components/ui`, angepasst: größere Touch-Ziele). TanStack Query (Polling 20 s), react-hook-form + zod, dnd-kit, sonner.
-  - Seiten: `src/pages/{index,unterkunft,fahrgemeinschaft,brautpaar}.astro`, Layout `src/layouts/Base.astro`.
+  - Seiten: `src/pages/{index,unterkunft,fahrgemeinschaft,ruegen,brautpaar}.astro`, Layout `src/layouts/Base.astro`.
+  - `/ruegen`: Ausflugstipps als Diashow (`components/ruegen/RuegenShow.tsx`, Ken Burns, Story-Fortschritt, Filter, Swipe), Inhalte in `src/data/ruegen.ts`. Bilder aus `website/img` (HEIC, per heic-convert + sharp konvertiert) in `src/assets/img/ruegen/`. Hero = `hero-strand.jpg` (IMG_1525, Panorama).
   - Daten: `src/lib/api/` mit Interface `Api`, Implementierungen `supabase.ts` und `demo.ts` (localStorage `rugenhof.demo.v2`). `getApi()` wählt anhand der Env-Variablen.
   - Reine Logik: `src/lib/plan.ts`, `src/lib/rides.ts` (Vitest: `npm test`).
   - Eigene Einträge pro Gerät: `src/lib/keyring.ts` (localStorage + Hash-Link). Keys: `rugenhof.entries.v1`/`#edit=` (Aufenthalte, kompatibel zur alten Seite), `rugenhof.rides.v1`/`#fahrt=`, `rugenhof.seats.v1`/`#platz=`. Alte Links `/#edit=…` leitet die Startseite auf `/unterkunft` um.
