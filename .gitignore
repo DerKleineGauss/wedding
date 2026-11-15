@@ -6,6 +6,7 @@ dbpw.txt
 
 # Rohfotos (groß, teils HEIC); bearbeitete Versionen liegen in web/src/assets
 website/assets/
+website/img/
 
 # Node / Astro
 node_modules/

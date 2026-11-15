@@ -2,7 +2,7 @@
 import { Picture } from "astro:assets";
 import Base from "@/layouts/Base.astro";
 import Countdown from "@/components/common/Countdown";
-import hero from "@/assets/img/hero.jpg";
+import hero from "@/assets/img/hero-strand.jpg";
 import paar from "@/assets/img/paar.jpg";
 import boddenUfer from "@/assets/img/bodden-ufer.jpg";
 import sandschrift from "@/assets/img/sandschrift.jpg";
@@ -13,6 +13,7 @@ import strand from "@/assets/img/strand.jpg";
 const live = [
   { href: "/unterkunft", eyebrow: "Jetzt eintragen", title: "Unterkunft", text: "Sag uns, von wann bis wann du da bist. Wir verteilen alle auf die Häuser." },
   { href: "/fahrgemeinschaft", eyebrow: "Jetzt eintragen", title: "Fahrgemeinschaft", text: "Plätze anbieten oder eine Mitfahrt finden. Spart Geld, Parkplätze und Nerven." },
+  { href: "/ruegen", eyebrow: "Urlaub dranhängen", title: "Rügen erleben", text: "Unsere Lieblingsideen für die Tage vor und nach dem Fest, von Buchenwald bis Lasertag." },
 ];
 const soon = [
   { title: "Ablauf", text: "Was wann passiert, von der Ankunft bis zum Katerfrühstück." },
@@ -41,25 +42,25 @@ const gallery = [
   <section class="relative isolate flex min-h-[min(88vh,760px)] items-end overflow-hidden bg-[#12303A] text-white">
     <Picture
       src={hero}
-      alt="Treibholz am Ufer des Boddens, im Wasser steht eine Frau im orangefarbenen Kleid"
-      widths={[800, 1400, 2000]}
-      sizes="100vw"
+      alt="Weiter Sandstrand mit Strandkörben unter großen Wolken, die Ostsee bis zum Horizont"
+      widths={[900, 1600, 2400, 3200]}
+      sizes="(min-aspect-ratio: 3/1) 100vw, 300vh"
       formats={["avif", "webp"]}
       loading="eager"
       fetchpriority="high"
-      class="absolute inset-0 -z-20 size-full object-cover object-[64%_25%] md:object-[50%_42%]"
+      class="hero-img absolute inset-0 -z-20 size-full object-cover object-[42%_50%] md:object-[50%_50%]"
     />
-    <div class="absolute inset-0 -z-10 bg-gradient-to-t from-[#09181D]/95 via-[#09181D]/45 to-[#09181D]/25"></div>
+    <div class="absolute inset-0 -z-10 bg-gradient-to-t from-[#09181D]/90 via-[#09181D]/35 via-50% to-[#09181D]/30"></div>
 
     <div class="container-page grid w-full gap-8 pt-28 pb-12 md:grid-cols-[1fr_auto] md:items-end md:pb-16">
       <div class="grid gap-4">
-        <p class="text-sm font-semibold tracking-[0.09em] text-white/85 uppercase">
+        <p class="hero-rise text-sm font-semibold tracking-[0.09em] text-white/85 uppercase">
           <b class="text-[#FFC37A]">16.–18. August 2027</b> · Ferienanlage Rugenhof · Rügen
         </p>
-        <h1 class="text-[clamp(48px,11vw,112px)] leading-[0.95] font-bold tracking-[-0.035em] [text-shadow:0_2px_24px_rgb(0_0_0/0.35)]">
+        <h1 class="hero-rise text-[clamp(48px,11vw,112px)] leading-[0.95] font-bold tracking-[-0.035em] [text-shadow:0_2px_24px_rgb(0_0_0/0.35)]" style="animation-delay: 120ms">
           Wir heiraten<br />am Bodden.
         </h1>
-        <p class="max-w-[52ch] text-[17px] text-white/90">
+        <p class="hero-rise max-w-[52ch] text-[17px] text-white/90" style="animation-delay: 240ms">
           Drei Tage mit euch auf Rügen. Hier findet ihr alles, was ihr zum Planen braucht, und nach dem Fest auch die Fotos.
         </p>
       </div>
@@ -72,7 +73,7 @@ const gallery = [
   <div class="container-page grid gap-20 pt-14">
     <section aria-labelledby="now-h" class="grid gap-5">
       <h2 id="now-h" class="text-[clamp(26px,4vw,36px)] font-bold">Was jetzt schon geht</h2>
-      <div class="grid gap-4 md:grid-cols-2">
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {
           live.map((c) => (
             <a href={c.href} class="group grid gap-2 rounded-3xl border bg-card p-6 shadow-soft transition hover:-translate-y-0.5 hover:border-sanddorn md:p-8">
@@ -106,7 +107,7 @@ const gallery = [
     </section>
 
     <section aria-labelledby="gal-h" class="grid gap-5">
-      <h2 id="gal-h" class="text-[clamp(26px,4vw,36px)] font-bold">Unser Rügen</h2>
+      <h2 id="gal-h" class="text-[clamp(26px,4vw,36px)] font-bold">Zur Einstimmung</h2>
       <div class="grid grid-cols-2 gap-2.5 md:grid-cols-3">
         {
           gallery.map((g) => (

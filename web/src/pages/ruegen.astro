@@ -1,0 +1,101 @@
+---
+import { getImage, Picture } from "astro:assets";
+import Base from "@/layouts/Base.astro";
+import RuegenShow, { type ShowSlide } from "@/components/ruegen/RuegenShow";
+import { CATEGORIES, more, tips } from "@/data/ruegen";
+
+const W = [640, 1024, 1600];
+const slides: ShowSlide[] = await Promise.all(
+  tips.map(async (t) => {
+    const [avif, webp, thumb, blur] = await Promise.all([
+      getImage({ src: t.img, widths: W, format: "avif" }),
+      getImage({ src: t.img, widths: W, format: "webp" }),
+      getImage({ src: t.img, width: 240, format: "webp" }),
+      getImage({ src: t.img, width: 48, format: "webp", quality: 50 }),
+    ]);
+    return {
+      id: t.id,
+      cat: t.cat,
+      title: t.title,
+      place: t.place,
+      tip: t.tip,
+      alt: t.alt,
+      pos: t.pos ?? "50% 45%",
+      textTop: t.text === "top",
+      ratio: t.img.width / t.img.height,
+      avif: avif.srcSet.attribute,
+      webp: webp.srcSet.attribute,
+      src: webp.src,
+      thumb: thumb.src,
+      blur: blur.src,
+    };
+  }),
+);
+const first = tips[0];
+const cats = CATEGORIES.filter((c) => tips.some((t) => t.cat === c));
+---
+
+<Base title="Rügen erleben" description="Ideen für die Tage vor und nach der Hochzeit auf Rügen.">
+  <div class="container-page grid gap-3 pt-10 pb-8 md:pt-14">
+    <p class="eyebrow">Vor und nach dem Fest</p>
+    <h1 class="text-[clamp(34px,6vw,56px)] font-bold tracking-[-0.02em]">Rügen erleben</h1>
+    <p class="max-w-[60ch] text-base text-muted-foreground md:text-[17px]">
+      Viele von euch hängen ein paar Tage dran. Gute Idee! Hier sind unsere Lieblingsideen für die Insel, alle von uns selbst getestet,
+      manche mit vollem Körpereinsatz.
+    </p>
+  </div>
+
+  <div class="container-page grid gap-20">
+    <section aria-label="Diashow mit Tipps">
+      <RuegenShow client:only="react" slides={slides} categories={cats}>
+        <div slot="fallback" class="relative aspect-[4/5] max-h-[82vh] overflow-hidden rounded-3xl bg-[#09181D] sm:aspect-[3/2] lg:aspect-[16/9]">
+          <Picture
+            src={first.img}
+            alt={first.alt}
+            widths={W}
+            sizes="(min-width: 1152px) 1088px, 100vw"
+            formats={["avif", "webp"]}
+            loading="eager"
+            class="size-full object-cover"
+          />
+        </div>
+      </RuegenShow>
+      <noscript>
+        <ul class="mt-6 grid gap-4 sm:grid-cols-2">
+          {
+            tips.map((t) => (
+              <li class="rounded-2xl border bg-card p-5">
+                <p class="eyebrow text-sanddorn">{t.cat}</p>
+                <h3 class="text-lg font-semibold">{t.title}</h3>
+                <p class="text-sm text-muted-foreground">{t.tip}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </noscript>
+    </section>
+
+    <section aria-labelledby="more-h" class="grid gap-6">
+      <div class="grid gap-2">
+        <h2 id="more-h" class="text-[clamp(26px,4vw,36px)] font-bold">Noch mehr Ideen</h2>
+        <p class="text-muted-foreground">Ohne Beweisfoto, aber trotzdem empfohlen.</p>
+      </div>
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          more.map((m, i) => (
+            <li class="reveal group relative grid gap-2 overflow-hidden rounded-3xl border bg-card p-6 shadow-soft">
+              <span class="font-heading text-5xl leading-none font-bold text-sanddorn/25 tabular-nums transition-colors group-hover:text-sanddorn/60" aria-hidden="true">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <h3 class="text-xl font-bold">{m.title}</h3>
+              <p class="text-[15px] text-muted-foreground">{m.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="text-sm text-muted-foreground">
+        Öffnungszeiten und Termine ändern sich: bitte vorher kurz nachschauen. Habt ihr selbst einen Tipp? Erzählt ihn uns, wir nehmen ihn auf.
+      </p>
+    </section>
+  </div>
+</Base>
